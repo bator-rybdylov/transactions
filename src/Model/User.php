@@ -95,17 +95,17 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSessionToken() : string
+    public function getSessionToken()
     {
         return $this->session_token;
     }
 
     /**
-     * @param string $session_token
+     * @param string|null $session_token
      */
-    public function setSessionToken(string $session_token)
+    public function setSessionToken($session_token)
     {
         $this->session_token = $session_token;
     }

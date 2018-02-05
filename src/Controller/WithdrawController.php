@@ -25,6 +25,12 @@ class WithdrawController extends Controller
 
     public function withdrawAction()
     {
+        $user_service = new UserService(new UserRepository());
+        $user = $user_service->getCurrentUser();
+
+        // Check if user logged in
+        $user_service->validateLoggedUser($user);
+
         $receiver_id = isset($_POST['receiver']) ? intval($_POST['receiver']) : 0;
         if (!isset($_POST['amount']) || $receiver_id <= 0) {
             $this->redirect('/dashboard', [
@@ -37,12 +43,6 @@ class WithdrawController extends Controller
                 'withdraw_error' => 'Amount should be a positive decimal number.'
             ]);
         }
-
-        $user_service = new UserService(new UserRepository());
-        $user = $user_service->getCurrentUser();
-
-        // Check if user logged in
-        $user_service->validateLoggedUser($user);
 
         $amount = round(floatval($_POST['amount']), 2);
 
