@@ -7,7 +7,7 @@ Download the files.
 
 Create a database for the project.
 
-Import dump_2018_02_01.sql into the database.
+Import SQL dump into the database.
 
 Copy /config/database_sample.php file and rename the file to the database.php.
 

@@ -24,13 +24,13 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `funds` decimal(20,2) unsigned NOT NULL DEFAULT '0.00',
-  `session_token` varchar(255) DEFAULT NULL,
+  `session_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'user1','$2y$10$t.JYrQYaNpj4CeNfqRQ/X.a.XyB9iFv7UjoFGuPhizXtBf9LdZbge',30.00,'0eaf354d02d3088c4d9d93562ec65d82'),(2,'user2','$2y$10$bci7IM.xh18y1V0bwIQdM.p.2LNUvNQCVqSpdYraGzZCATniozhS2',220.00,'65e1cac84cd0af573c6e9f6913a04e54');
+INSERT INTO `users` VALUES (1,'user1','$2y$10$t.JYrQYaNpj4CeNfqRQ/X.a.XyB9iFv7UjoFGuPhizXtBf9LdZbge',199.99,NULL),(2,'user2','$2y$10$bci7IM.xh18y1V0bwIQdM.p.2LNUvNQCVqSpdYraGzZCATniozhS2',100.01,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-01 21:33:28
+-- Dump completed on 2018-02-05 20:47:19
