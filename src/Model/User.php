@@ -30,52 +30,82 @@ class User
     private $session_token;
 
 
-    public function getId()
+    /**
+     * @return int
+     */
+    public function getId() : int
     {
         return $this->id;
     }
 
-    public function setId($id)
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
     {
         $this->id = $id;
     }
 
-    public function getUsername()
+    /**
+     * @return string
+     */
+    public function getUsername() : string
     {
         return $this->username;
     }
 
-    public function setUsername($username)
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username)
     {
         $this->username = $username;
     }
 
-    public function getPassword()
+    /**
+     * @return string
+     */
+    public function getPassword() :string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password)
     {
         $this->password = $password;
     }
 
-    public function getFunds()
+    /**
+     * @return float
+     */
+    public function getFunds() : float
     {
         return $this->funds;
     }
 
-    public function setFunds($funds)
+    /**
+     * @param float $funds
+     */
+    public function setFunds(float $funds)
     {
-        $this->funds = $funds;
+        $this->funds = floatval($funds);
     }
 
-    public function getSessionToken()
+    /**
+     * @return string
+     */
+    public function getSessionToken() : string
     {
         return $this->session_token;
     }
 
-    public function setSessionToken($session_token)
+    /**
+     * @param string $session_token
+     */
+    public function setSessionToken(string $session_token)
     {
         $this->session_token = $session_token;
     }

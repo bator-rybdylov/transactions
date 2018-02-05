@@ -2,8 +2,8 @@
 
 namespace Service;
 
-use Model\User;
-use Model\UserRepository;
+use Core\Controller;
+use Model\{User, UserRepository};
 
 class UserService
 {
@@ -15,11 +15,12 @@ class UserService
     }
 
     /**
-     * @return mixed|null
+     * @return User|null
      */
     public function getCurrentUser()
     {
-        return $this->user_repository->findBySessionToken($_SESSION['token']);
+        return $this->user_repository
+            ->findBySessionToken($_SESSION['token']);
     }
 
     /**
@@ -55,18 +56,19 @@ class UserService
             $receiver_id = $receiver->getId();
         }
 
-        return $this->user_repository->withdrawFunds($amount, $sender_id, $receiver_id);
+        return $this->user_repository
+            ->withdrawFunds($amount, $sender_id, $receiver_id);
     }
 
     /**
-     * If user doesn't exist or user token from DB doesn't match with token from session,
-     * the user is invalid
-     *
+     * If user is not logged in, redirect to login page
      * @param User $user
-     * @return bool
      */
-    public function isLoggedUser($user)
+    public function validateLoggedUser($user)
     {
-        return !is_null($user) && $_SESSION['token'] === $user->getSessionToken();
+        if (is_null($user)) {
+            unset($_SESSION['token']);
+            Controller::redirect('/');
+        }
     }
 }

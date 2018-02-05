@@ -18,7 +18,7 @@ class UserRepository
 
     /**
      * @param string $username
-     * @return mixed|null
+     * @return User|null
      */
     public function findByUsername($username)
     {
@@ -41,7 +41,7 @@ class UserRepository
 
     /**
      * @param string $session_token
-     * @return mixed|null
+     * @return User|null
      */
     public function findBySessionToken($session_token)
     {
@@ -135,21 +135,33 @@ class UserRepository
     public function withdrawFunds($amount, $sender_id, $receiver_id)
     {
         try {
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $this->pdo->beginTransaction();
 
+            // Check if user doesn't have enough funds
+            $stmt_funds = $this->pdo
+                ->prepare('SELECT funds FROM users WHERE id = :sender_id');
+            $stmt_funds->bindParam(':sender_id', $sender_id, PDO::PARAM_INT);
+            $stmt_funds->execute();
+
+            $funds_result = $stmt_funds->fetch();
+            $funds = floatval($funds_result['funds']);
+            if ($funds < $amount) {
+                throw new \Exception('Not enough funds.');
+            }
+
             // Subtract amount from sender
-            $stmt1 = $this->pdo->prepare('UPDATE users SET funds = funds - :amount WHERE id = :sender_id');
-            $stmt1->bindParam(':amount', $amount);
-            $stmt1->bindParam(':sender_id', $sender_id, PDO::PARAM_INT);
-            $stmt1->execute();
+            $stmt_dec = $this->pdo
+                ->prepare('UPDATE users SET funds = funds - :amount WHERE id = :sender_id');
+            $stmt_dec->bindParam(':amount', $amount);
+            $stmt_dec->bindParam(':sender_id', $sender_id, PDO::PARAM_INT);
+            $stmt_dec->execute();
 
             // Add amount to receiver
-            $stmt2 = $this->pdo->prepare('UPDATE users SET funds = funds + :amount WHERE id = :receiver_id');
-            $stmt2->bindParam(':amount', $amount);
-            $stmt2->bindParam(':receiver_id', $receiver_id, PDO::PARAM_INT);
-            $stmt2->execute();
+            $stmt_inc = $this->pdo
+                ->prepare('UPDATE users SET funds = funds + :amount WHERE id = :receiver_id');
+            $stmt_inc->bindParam(':amount', $amount);
+            $stmt_inc->bindParam(':receiver_id', $receiver_id, PDO::PARAM_INT);
+            $stmt_inc->execute();
 
             $this->pdo->commit();
 

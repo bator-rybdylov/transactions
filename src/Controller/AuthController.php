@@ -3,8 +3,8 @@
 namespace Controller;
 
 use Core\Controller;
-use Model\User;
 use Model\UserRepository;
+use Service\UserService;
 
 class AuthController extends Controller
 {
@@ -28,17 +28,11 @@ class AuthController extends Controller
         $input_pass = $_POST['password'];
 
         $user_repository = new UserRepository();
-        /** @var User $user */
         $user = $user_repository->findByUsername($input_username);
 
-        // Check if user exist
-        if (is_null($user)) {
-            $this->redirect('/', ['login_error' => 'Wrong username.']);
-        }
-
-        // Check password
-        if (!password_verify($input_pass, $user->getPassword())) {
-            $this->redirect('/', ['login_error' => 'Wrong password.']);
+        // Check if user exists and check password
+        if (is_null($user) || !password_verify($input_pass, $user->getPassword())) {
+            $this->redirect('/', ['login_error' => 'Wrong username or password.']);
         }
 
         // Create token for logged in user
@@ -55,6 +49,19 @@ class AuthController extends Controller
 
     public function logoutAction()
     {
+        $user_repository = new UserRepository();
+        $user_service = new UserService($user_repository);
+        $user = $user_service->getCurrentUser();
+
+        if (is_null($user)) {
+            $this->redirect('/', ['login_error' => 'Error: Please try again later.']);
+        }
+
+        $user->setSessionToken(null);
+        if (!$user_repository->updateSessionToken($user)) {
+            $this->redirect('/', ['login_error' => 'Error: Please try again later.']);
+        }
+
         unset($_SESSION['token']);
         $this->redirect('/');
     }

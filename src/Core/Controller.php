@@ -16,7 +16,7 @@ class Controller {
      * @param $path
      * @param array $messages
      */
-    public function redirect($path, $messages = [])
+    public static function redirect($path, $messages = [])
     {
         if (count($messages) > 0) {
             foreach ($messages as $key => $message) {

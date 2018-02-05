@@ -28,16 +28,18 @@ class Router
                 $controller_name = 'Controller\\' . $route['controller'] . 'Controller';
                 $action_name = $route['action'] . 'Action';
 
-                $controller = new $controller_name;
-
-                if (method_exists($controller, $action_name)) {
+                if (is_callable($controller_name, $action_name)) {
+                    $controller = new $controller_name;
                     $controller->$action_name();
                 } else {
                     throw new \Exception('Page not found');
                 }
 
-                break;
+                exit();
             }
         }
+
+        header('Location: /');
+        exit();
     }
 }

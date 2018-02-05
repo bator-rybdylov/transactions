@@ -11,6 +11,7 @@ class DB
         $db_config = $this->getDBConfig();
         try {
             $this->pdo = new \PDO($db_config['dsn'], $db_config['user'], $db_config['pass'], null);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             print "Error: " . $e->getMessage() . "<br/>";
             die();
